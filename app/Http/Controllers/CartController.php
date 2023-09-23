@@ -59,8 +59,8 @@ class CartController extends Controller
             'slug'      =>  'required',
             'quant'      =>  'required',
         ]);
-        // dd($request->quant[1]);
 
+        // dd($request->slug);
 
         $product = Product::where('slug', $request->slug)->first();
         if($product->stock <$request->quant[1]){
@@ -221,14 +221,14 @@ class CartController extends Controller
     //     }
     // }
 
-    // public function removeCart(Request $request){
-    //     $index=$request->index;
-    //     // return $index;
-    //     $cart=session('cart');
-    //     unset($cart[$index]);
-    //     session()->put('cart',$cart);
-    //     return redirect()->back()->with('success','Successfully remove item');
-    // }
+    public function removeCart(Request $request){
+        $index=$request->index;
+        // return $index;
+        $cart=session('cart');
+        unset($cart[$index]);
+        session()->put('cart',$cart);
+        return redirect()->back()->with('success','Successfully remove item');
+    }
 
     public function checkout(Request $request){
         // $cart=session('cart');

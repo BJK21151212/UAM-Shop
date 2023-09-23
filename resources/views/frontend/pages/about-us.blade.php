@@ -1,5 +1,9 @@
 @extends('frontend.layouts.master')
 
+@section('meta')
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+@endsection
+
 @section('title','E-SHOP || About Us')
 
 @section('main-content')

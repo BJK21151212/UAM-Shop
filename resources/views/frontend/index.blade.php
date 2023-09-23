@@ -1,4 +1,7 @@
 @extends('frontend.layouts.master')
+@section('meta')
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+@endsection
 @section('title','E-SHOP || HOME PAGE')
 @section('main-content')
 <!-- Slider Area -->
@@ -90,12 +93,15 @@
                                 @endphp
                                 @if($categories)
                                 <button class="btn" style="background:black"data-filter="*">
-                                    All Products
+                                    All Produc
                                 </button>
+                                
                                     @foreach($categories as $key=>$cat)
+                                    @php
+                                     $product_cat_um=DB::table('products')->where('cat_id',$cat->id)->count();@endphp
 
                                     <button class="btn" style="background:none;color:black;"data-filter=".{{$cat->id}}">
-                                        {{$cat->title}}
+                                        {{$cat->title}}{{$product_cat_um}}
                                     </button>
                                     @endforeach
                                 @endif
@@ -224,7 +230,7 @@
                                 </a>
                                 <div class="button-head">
                                     <div class="product-action">
-                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href=""><i class=" ti-eye"></i><span>Quick Shop</span></a>
                                         <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" ><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
                                     </div>
                                     <div class="product-action-2">
@@ -268,6 +274,7 @@
                 <div class="row">
                     @php
                         $product_lists=DB::table('products')->where('status','active')->orderBy('id','DESC')->limit(6)->get();
+                        
                     @endphp
                     @foreach($product_lists as $product)
                         <div class="col-md-4">
