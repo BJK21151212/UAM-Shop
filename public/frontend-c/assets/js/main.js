@@ -1323,14 +1323,14 @@
                 productsCartAction: function () {
                     t("body").on("click", ".btn-add-cart.product-type-simple", function (e) {
                         var i;
-                         e.preventDefault(),
+                        //  e.preventDefault(),
                             (i = t(this).closest(".product-default").length > 0 ? t(this).closest(".product-default") : t(this).closest(".product-row")),
                             c.miniPopup.open({ name: i.find(".product-title").text(), nameLink: i.find(".product-title > a").attr("href"), imageSrc: i.find("figure img").attr("src"), imageLink: i.find(".product-title > a").attr("href") });
                     });
                 },
                 productsWishlistAction: function () {
                     t("body").on("click", ".btn-icon-wish:not(.added-wishlist)", function (e) {
-                        e.preventDefault();
+                        // e.preventDefault();
                         var i = t(this);
                         i.addClass("load-more-overlay loading"),
                             setTimeout(function () {

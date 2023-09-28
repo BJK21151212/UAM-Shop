@@ -353,7 +353,7 @@ class FrontendController extends Controller
 
     // Login
     public function login(){
-        return view('frontend.pages.login');
+        return view('frontend.pages.login-c');
     }
     public function loginSubmit(Request $request){
         $data= $request->all();
@@ -376,7 +376,7 @@ class FrontendController extends Controller
     }
 
     public function register(){
-        return view('frontend.pages.register');
+        return view('frontend.pages.register-c');
     }
     public function registerSubmit(Request $request){
         // return $request->all();

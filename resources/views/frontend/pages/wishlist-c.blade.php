@@ -1,4 +1,4 @@
-@extends('frontend.layouts.master')
+@extends('frontend.layouts.master-c')
 @section('title','Wishlist Page')
 @section('main-content')
 <main class="main">
@@ -7,7 +7,7 @@
 			<nav aria-label="breadcrumb" class="breadcrumb-nav">
 				<div class="container">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="demo4.html">Home</a></li>
+						<li class="breadcrumb-item"><a href="{{('home')}}">Home</a></li>
 						<li class="breadcrumb-item active" aria-current="page">
 							Wishlist
 						</li>
@@ -21,7 +21,7 @@
 
 	<div class="container">
 		<div class="wishlist-title">
-			<h2 class="p-2">My wishlist on Porto Shop 4</h2>
+			<h2 class="p-2">My wishlist</h2>
 		</div>
 		<div class="wishlist-table-container">
 			<table class="table table-wishlist mb-0">
@@ -31,96 +31,48 @@
 						<th class="product-col">Product</th>
 						<th class="price-col">Price</th>
 						<th class="status-col">Stock Status</th>
-						<th class="action-col">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="product-row">
-						<td>
-							<figure class="product-image-container">
-								<a href="product.html" class="product-image">
-									<img src="assets/images/products/product-4.jpg" alt="product">
+					@if(Helper::getAllProductFromWishlist())
+						@foreach(Helper::getAllProductFromWishlist() as $key=>$wishlist)
+						<tr class="product-row">
+							@php 
+								$photo=explode(',',$wishlist->product['photo']);
+							@endphp
+							<td>
+								<figure class="product-image-container">
+									<a href="product.html" class="product-image">
+										<img src="{{$photo[0]}}" alt="{{$wishlist->product['title']}}">
+									</a>
+
+									<a href="{{route('wishlist-delete',$wishlist->id)}}" class="btn-remove icon-cancel" title="Remove Product"></a>
+								</figure>
+							</td>
+							<td>
+								<h5 class="product-title">
+									<a href="{{route('product-detail',$wishlist->product['slug'])}}">{{$wishlist->product['title']}}</a>
+								</h5>
+							</td>
+							<td class="price-box">${{$wishlist['amount']}}</td>
+							<td class="action">
+								<button  data-toggle="modal" data-target="#{{$wishlist->id}}" class="btn btn-quickview mt-1 mt-md-0"
+									title="Quick View">Quick
+									View</button>
+								<a href="{{route('add-to-cart',$wishlist->product['slug'])}}" class="btn btn-dark btn-add-cart product-type-simple btn-shop">
+									ADD TO CART
 								</a>
+							</td>
+						</tr>
+						@endforeach
+					@else
+						<tr>
+							<td class="text-center">
+								There are no any wishlist available. <a href="{{route('product-grids')}}" style="color:blue;">Continue shopping</a>
 
-								<a href="#" class="btn-remove icon-cancel" title="Remove Product"></a>
-							</figure>
-						</td>
-						<td>
-							<h5 class="product-title">
-								<a href="product.html">Men Watch</a>
-							</h5>
-						</td>
-						<td class="price-box">$17.90</td>
-						<td>
-							<span class="stock-status">In stock</span>
-						</td>
-						<td class="action">
-							<a href="ajax/product-quick-view.html" class="btn btn-quickview mt-1 mt-md-0"
-								title="Quick View">Quick
-								View</a>
-							<button class="btn btn-dark btn-add-cart product-type-simple btn-shop">
-								ADD TO CART
-							</button>
-						</td>
-					</tr>
-
-					<tr class="product-row">
-						<td>
-							<figure class="product-image-container">
-								<a href="product.html" class="product-image">
-									<img src="assets/images/products/product-5.jpg" alt="product">
-								</a>
-
-								<a href="#" class="btn-remove icon-cancel" title="Remove Product"></a>
-							</figure>
-						</td>
-						<td>
-							<h5 class="product-title">
-								<a href="product.html">Men Cap</a>
-							</h5>
-						</td>
-						<td class="price-box">$17.90</td>
-						<td>
-							<span class="stock-status">In stock</span>
-						</td>
-						<td class="action">
-							<a href="ajax/product-quick-view.html" class="btn btn-quickview mt-1 mt-md-0"
-								title="Quick View">Quick
-								View</a>
-							<a href="product.html" class="btn btn-dark btn-add-cart btn-shop">
-								SELECT OPTION
-							</a>
-						</td>
-					</tr>
-
-					<tr class="product-row">
-						<td>
-							<figure class="product-image-container">
-								<a href="product.html" class="product-image">
-									<img src="assets/images/products/product-6.jpg" alt="product">
-								</a>
-
-								<a href="#" class="btn-remove icon-cancel" title="Remove Product"></a>
-							</figure>
-						</td>
-						<td>
-							<h5 class="product-title">
-								<a href="product.html">Men Black Gentle Belt</a>
-							</h5>
-						</td>
-						<td class="price-box">$17.90</td>
-						<td>
-							<span class="stock-status">In stock</span>
-						</td>
-						<td class="action">
-							<a href="ajax/product-quick-view.html" class="btn btn-quickview mt-1 mt-md-0"
-								title="Quick View">Quick
-								View</a>
-							<a href="product.html" class="btn btn-dark btn-add-cart btn-shop">
-								SELECT OPTION
-							</a>
-						</td>
-					</tr>
+							</td>
+						</tr>
+					@endif
 				</tbody>
 			</table>
 		</div><!-- End .cart-table-container -->
@@ -131,40 +83,51 @@
 	<!-- Start Shop Services Area  -->
 	<section class="shop-services section">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-12">
+			<div class="info-boxes-slider owl-carousel owl-theme mb-2" data-owl-options="{
+				'dots': false,
+				'loop': false,
+				'responsive': {
+					'576': {
+						'items': 2
+					},
+					'992': {
+						'items': 3
+					}
+				}
+				}">
+				<div class="info-box info-box-icon-left">
+					<i class="icon-shipping"></i>
 					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-rocket"></i>
+					<div class="info-box-content">
 						<h4>Free shiping</h4>
 						<p>Orders over $100</p>
 					</div>
 					<!-- End Single Service -->
 				</div>
-				<div class="col-lg-3 col-md-6 col-12">
+				<div class="info-box info-box-icon-left">
+					<i class="icon-money"></i>
 					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-reload"></i>
+					<div class="info-box-content">
 						<h4>Free Return</h4>
 						<p>Within 30 days returns</p>
 					</div>
 					<!-- End Single Service -->
 				</div>
-				<div class="col-lg-3 col-md-6 col-12">
+				<div class="info-box info-box-icon-left">
+					<i class="icon-lock"></i>
 					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-lock"></i>
+					<div class="info-box-content">
 						<h4>Sucure Payment</h4>
 						<p>100% secure payment</p>
 					</div>
 					<!-- End Single Service -->
 				</div>
-				<div class="col-lg-3 col-md-6 col-12">
+				<div class="info-box info-box-icon-left">
+					<i class="icon-support"></i>
 					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-tag"></i>
-						<h4>Best Peice</h4>
-						<p>Guaranteed price</p>
+					<div class="info-box-content">
+						<h4>Online Support</h4>
+						<p>24/7 online support</p>
 					</div>
 					<!-- End Single Service -->
 				</div>
@@ -173,123 +136,133 @@
 	</section>
 	<!-- End Shop Newsletter -->
 	
-	@include('frontend.layouts.newsletter')
+	@include('frontend.layouts.newsletter-c')
 	
-	
-	
-	<!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close" aria-hidden="true"></span></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row no-gutters">
-                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                <!-- Product Slider -->
-									<div class="product-gallery">
-										<div class="quickview-slider-active">
-											<div class="single-slider">
-												<img src="images/modal1.jpg" alt="#">
-											</div>
-											<div class="single-slider">
-												<img src="images/modal2.jpg" alt="#">
-											</div>
-											<div class="single-slider">
-												<img src="images/modal3.jpg" alt="#">
-											</div>
-											<div class="single-slider">
-												<img src="images/modal4.jpg" alt="#">
-											</div>
-										</div>
-									</div>
-								<!-- End Product slider -->
-                            </div>
-                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                <div class="quickview-content">
-                                    <h2>Flared Shift Dress</h2>
-                                    <div class="quickview-ratting-review">
-                                        <div class="quickview-ratting-wrap">
-                                            <div class="quickview-ratting">
-                                                <i class="yellow fa fa-star"></i>
-                                                <i class="yellow fa fa-star"></i>
-                                                <i class="yellow fa fa-star"></i>
-                                                <i class="yellow fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                            <a href="#"> (1 customer review)</a>
-                                        </div>
-                                        <div class="quickview-stock">
-                                            <span><i class="fa fa-check-circle-o"></i> in stock</span>
-                                        </div>
-                                    </div>
-                                    <h3>$29.00</h3>
-                                    <div class="quickview-peragraph">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum ad impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui nemo ipsum numquam.</p>
-                                    </div>
-									<div class="size">
-										<div class="row">
-											<div class="col-lg-6 col-12">
-												<h5 class="title">Size</h5>
-												<select>
-													<option selected="selected">s</option>
-													<option>m</option>
-													<option>l</option>
-													<option>xl</option>
-												</select>
-											</div>
-											<div class="col-lg-6 col-12">
-												<h5 class="title">Color</h5>
-												<select>
-													<option selected="selected">orange</option>
-													<option>purple</option>
-													<option>black</option>
-													<option>pink</option>
-												</select>
-											</div>
-										</div>
-									</div>
-                                    <div class="quantity">
-										<!-- Input Order -->
-										<div class="input-group">
-											<div class="button minus">
-												<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-													<i class="ti-minus"></i>
-												</button>
-											</div>
-											<input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1">
-											<div class="button plus">
-												<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
-													<i class="ti-plus"></i>
-												</button>
-											</div>
-										</div>
-										<!--/ End Input Order -->
-									</div>
-									<div class="add-to-cart">
-										<a href="#" class="btn">Add to cart</a>
-										<a href="#" class="btn min"><i class="ti-heart"></i></a>
-										<a href="#" class="btn min"><i class="fa fa-compress"></i></a>
-									</div>
-                                    <div class="default-social">
-										<h4 class="share-now">Share:</h4>
-                                        <ul>
-                                            <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                                            <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
-                                        </ul>
+{{-- newaravial modal --}}
+@if(Helper::getAllProductFromWishlist())
+@foreach(Helper::getAllProductFromWishlist() as $key=>$wishlist)
+<div class="modal fade " id="{{$wishlist->id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="product-single-container product-single-default product-quick-view mb-0" id="{{$wishlist->id}}" tabindex="-1" role="dialog">
+                    <div class="row">
+                        <div class="col-md-6 product-single-gallery mb-md-0">
+                            <div class="product-slider-container">
+                                <div class="label-group">
+                                    <div class="product-label label-sale">
+                                        -{{$wishlist->product['discount'] }}%
                                     </div>
                                 </div>
+                
+                                <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
+                                    @php
+                                    $photo=explode(',',$wishlist->product['photo'] );
+                                // dd($photo);
+                                    @endphp
+                                    @foreach($photo as $data)
+                                        <div class="product-item">
+                                            <img class="product-single-image" src="{{$data}}"
+                                                data-zoom-image="{{$data}}" />
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <!-- End .product-single-carousel -->
                             </div>
-                        </div>
-                    </div>
+                            <div class="prod-thumbnail owl-dots">
+                                @foreach($photo as $data)
+                                        <div class="owl-dot">
+                                            <img src="{{$data}}" />
+                                        </div>
+                                @endforeach
+                            </div>
+                        </div><!-- End .product-single-gallery -->
+                
+                        <div class="col-md-6">
+                            <div class="product-single-details mb-0 ml-md-4">
+                                <h1 class="product-title">{{$wishlist->product['title'] }}</h1>
+            
+                                @php
+                                    $rate=DB::table('product_reviews')->where('product_id',$wishlist->product['id'] )->avg('rate');
+                                    $rate_count=DB::table('product_reviews')->where('product_id',$wishlist->product['id'] )->count();
+                                @endphp
+
+                                <div class="ratings-container">
+                                    <div class="product-ratings">
+                                        <span class="ratings" style="width:60%"></span><!-- End .ratings -->
+                                    </div><!-- End .product-ratings -->
+                
+                                    <a href="#" class="rating-link">( {{$rate_count}} Reviews )</a>
+                                </div><!-- End .ratings-container -->
+                
+                                <hr class="short-divider">
+                
+                                <div class="price-box">
+                                    @php
+                                        $after_discount=($wishlist->product['price'] -($wishlist->product['price'] *$wishlist->product['discount'] )/100);
+                                    @endphp
+									<del class="old-price">${{number_format($wishlist->product['price'] ,2)}}</del>
+									<span class="product-price">${{number_format($after_discount,2)}}</span>
+                                </div><!-- End .price-box -->
+                
+                                <div class="product-desc">
+                                    <p>
+                                        {!! html_entity_decode($wishlist->product['summary'] ) !!}
+                                    </p>
+                                </div><!-- End .product-desc -->
+                
+                                {{-- <ul class="single-info-list">
+                                    <!---->
+                                    <li>
+                                        SKU:
+                                        <strong>654613612</strong>
+                                    </li>
+                
+                                    <li>
+                                        CATEGORY:
+                                        <strong>
+                                            <a href="#" class="product-category">SHOES</a>
+                                        </strong>
+                                    </li>
+                                    </ul>
+                                --}}
+                                <div class="product-filters-container">
+                                    <div class="product-single-filter">
+                                        <label>Size:</label>
+                                        <ul class="config-size-list">
+                                            @php
+                                                $sizes=explode(',',$wishlist->product['size'] );
+                                                 // dd($sizes);
+                                            @endphp
+                                            @foreach($sizes as $size)
+                                            <li><a href="javascript:;" class="d-flex align-items-center justify-content-center">{{$size}}</a>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                
+                                    <div class="product-single-filter">
+                                        <label></label>
+                                        <a class="font1 text-uppercase clear-btn" href="#">Clear</a>
+                                    </div>
+                                    <!---->
+                                </div>
+                            </div>
+                        </div><!-- End .product-single-details -->
+                
+                        <button title="Close (Esc)" type="button" class="mfp-close close" data-dismiss="modal">
+                            ×
+                        </button>
+                    </div><!-- End .row -->
                 </div>
-            </div>
+            </div> 
         </div>
-        <!-- Modal end -->
-	
+    </div>
+</div><!-- End .product-single-container -->
+@endforeach
+@endif
+<!-- new araival Modal end -->
+
 @endsection
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>

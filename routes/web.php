@@ -63,7 +63,7 @@
     Route::get('/checkout', 'CartController@checkout')->name('checkout')->middleware('user');
 // Wishlist
     Route::get('/wishlist', function () {
-        return view('frontend.pages.wishlist');
+        return view('frontend.pages.wishlist-c');
     })->name('wishlist');
     Route::get('/wishlist/{slug}', 'WishlistController@wishlist')->name('add-to-wishlist')->middleware('user');
     Route::get('wishlist-delete/{id}', 'WishlistController@wishlistDelete')->name('wishlist-delete');

@@ -1,3 +1,60 @@
+<div class="modal fade " id="login-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="product-single-container product-single-default product-quick-view mb-0 custom-scrollbar">
+                    <div class="modal-wrapper login-popup"> 
+                        <div class="col">
+                            <div class="container">
+                                <h2 class="title">Login</h2>
+                            </div>
+                
+                            <form action="{{route('login.submit')}}" method="post">
+                                @csrf
+                                <label for="login-email">
+                                    Username or email address
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="email" name="email" placeholder="" value="{{old('email')}}" class="form-input form-wide" id="login-email" required />
+                                @error('email')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
+                                <label for="login-password">
+                                    Password
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="password" name="password" class="form-input form-wide" id="login-password" required />
+                                @error('password')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
+                                <div class="form-footer">
+                                    <div class="custom-control custom-checkbox mb-0">
+                                        <input type="checkbox" class="custom-control-input" id="lost-password" />
+                                        <label class="custom-control-label mb-0" for="lost-password">Remember
+                                            me</label>
+                                    </div>
+                                    @if (Route::has('password.request'))
+                                        <a href="forgot-password.html"
+                                            class="forget-password text-dark form-footer-right">Forgot
+                                            Password?</a>   
+                                    @endif
+                                </div>
+                                <button type="submit" class="btn btn-dark w-50">
+                                    LOGIN
+                                </button>
+                                <a href="{{route('register.form')}}" class="btn  w-20">Register</a>
+                            </form>
+                        </div>
+                        <button title="Close (Esc)" type="button" class="mfp-close close" data-dismiss="modal">
+                            ×
+                        </button>
+                    </div><!-- End .row -->
+                </div><!-- End .product-single-container -->
+            </div> 
+        </div>
+    </div>
+
+</div><!-- End .product-single-container -->
 <footer class="footer bg-dark position-relative">
             <div class="footer-middle">
                 <div class="container position-static">
@@ -76,14 +133,19 @@
                                     <a href="#">Blue</a>
                                     <a href="#">Clothes</a>
                                     <a href="#">Fashion</a>
-                                    <a href="#">Hub</a>
-                                    <a href="#">Jean</a>
-                                    <a href="#">Shirt</a>
-                                    <a href="#">Skirt</a>
-                                    <a href="#">Sports</a>
-                                    <a href="#">Sweater</a>
-                                    <a href="#">Winter</a>
                                 </div>
+
+                            </div>
+                            <div class="widget widget-newsletter">
+                                <h4 class="widget-title">Subscribe newsletter</h4>
+                                <p>Get all the latest information on events, sales and offers. Sign up for newsletter:
+                                </p>
+                                <form action="{{route('subscribe')}}" method="post" class="mb-0">
+                                    @csrf
+                                    <input type="email" name="email" class="form-control m-b-3" placeholder="Email address" required>
+
+                                    <input type="submit" class="btn btn-primary shadow-none" value="Subscribe">
+                                </form>
                             </div>
                             <!-- End .widget -->
                         </div>

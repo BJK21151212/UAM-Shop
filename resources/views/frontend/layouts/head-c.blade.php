@@ -23,8 +23,8 @@
     <link rel="stylesheet" href="{{asset('frontend-c/assets/css/bootstrap.min.css')}}">
 
     <!-- Main CSS File -->
-    <link rel="stylesheet" href="{{asset('frontend-c/assets/css/style.min.css')}}">
     <link rel="stylesheet" href="{{asset('frontend-c/assets/css/demo4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('frontend-c/assets/css/style.min.css')}}">
     <link rel="stylesheet" href="{{asset('frontend-c/assets/css/demo1.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('frontend-c/assets/vendor/simple-line-icons/css/simple-line-icons.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('frontend-c/assets/vendor/fontawesome-free/css/all.min.css')}}">
