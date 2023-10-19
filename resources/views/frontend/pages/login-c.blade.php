@@ -31,59 +31,40 @@
                             <h2 class="title">Login</h2>
                         </div>
 
-                        <form action="#">
+                        <form action="{{route('login.submit')}}" method="post">
+                            @csrf
                             <label for="login-email">
                                 Username or email address
                                 <span class="required">*</span>
                             </label>
-                            <input type="email" class="form-input form-wide" id="login-email" required />
-
+                            <input type="email" name="email" placeholder="" value="{{old('email')}}" class="form-input form-wide" id="login-email" required />
+                            @error('email')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
                             <label for="login-password">
                                 Password
                                 <span class="required">*</span>
                             </label>
-                            <input type="password" class="form-input form-wide" id="login-password" required />
-
+                            <input type="password" name="password" class="form-input form-wide" id="login-password" required />
+                            @error('password')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
                             <div class="form-footer">
                                 <div class="custom-control custom-checkbox mb-0">
                                     <input type="checkbox" class="custom-control-input" id="lost-password" />
                                     <label class="custom-control-label mb-0" for="lost-password">Remember
                                         me</label>
                                 </div>
-
-                                <a href="forgot-password.html"
-                                    class="forget-password text-dark form-footer-right">Forgot
-                                    Password?</a>
+                                @if (Route::has('password.request'))
+                                    <a href="forgot-password.html"
+                                        class="forget-password text-dark form-footer-right">Forgot
+                                        Password?</a>   
+                                @endif
                             </div>
-                            <button type="submit" class="btn btn-dark btn-md w-100">
+                            <button type="submit" class="btn btn-dark w-50">
                                 LOGIN
                             </button>
-                        </form>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="heading mb-1">
-                            <h2 class="title">Register</h2>
-                        </div>
-
-                        <form action="#">
-                            <label for="register-email">
-                                Email address
-                                <span class="required">*</span>
-                            </label>
-                            <input type="email" class="form-input form-wide" id="register-email" required />
-
-                            <label for="register-password">
-                                Password
-                                <span class="required">*</span>
-                            </label>
-                            <input type="password" class="form-input form-wide" id="register-password"
-                                required />
-
-                            <div class="form-footer mb-2">
-                                <button type="submit" class="btn btn-dark btn-md w-100 mr-0">
-                                    Register
-                                </button>
-                            </div>
+                            <a href="{{route('register.form')}}" class="btn  w-20">Register</a>
                         </form>
                     </div>
                 </div>

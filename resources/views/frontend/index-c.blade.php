@@ -47,7 +47,7 @@
                     'items': 3
                 }
             }
-        }">
+            }">
             <div class="info-box info-box-icon-left">
                 <i class="icon-shipping"></i>
 
@@ -670,8 +670,11 @@
                                     @csrf
                                 <div class="product-action">
                                     <div class="price-box product-filtered-price">
-                                        <del class="old-price"><span>$286.00</span></del>
-                                        <span class="product-price">$245.00</span>
+                                        @php
+                                        $after_discount=($product->price-($product->price*$product->discount)/100);
+                                    @endphp
+									<del class="old-price">${{number_format($product->price,2)}}</del>
+									<span class="product-price">${{number_format($after_discount,2)}}</span>
                                     </div>
                                     <input type="hidden" name="slug" value="{{$product->slug}}">
                                     <div class="product-single-qty">
@@ -837,8 +840,11 @@
                                     @csrf
                                 <div class="product-action">
                                     <div class="price-box product-filtered-price">
-                                        <del class="old-price"><span>$286.00</span></del>
-                                        <span class="product-price">$245.00</span>
+                                        @php
+                                        $after_discount=($product->price-($product->price*$product->discount)/100);
+                                    @endphp
+									<del class="old-price">${{number_format($product->price,2)}}</del>
+									<span class="product-price">${{number_format($after_discount,2)}}</span>
                                     </div>
                                     <input type="hidden" name="slug" value="{{$product->slug}}">
                                     <div class="product-single-qty">
